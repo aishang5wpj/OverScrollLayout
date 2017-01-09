@@ -16,4 +16,8 @@ public class SimpleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
     }
+
+    public void onClick(View view) {
+        Toast.makeText(this, "button click", Toast.LENGTH_SHORT).show();
+    }
 }

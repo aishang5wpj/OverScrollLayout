@@ -10,7 +10,74 @@
 
 
 #项目使用
+要使用`DampingScrollViewGroup`给你的项目加上阻尼滚动效果，整个过程只需要两个步骤：
 
+1、在项目的`attrs.xml`文件中添加如下属性：
+
+```
+    <declare-styleable name="DampingScrollViewGroup">
+        <attr name="dampingFactor" format="float" />
+        <attr name="dampingDirection">
+            <flag name="left" value="0x0001" />
+            <flag name="top" value="0x0010" />
+            <flag name="right" value="0x0100" />
+            <flag name="bottom" value="0x1000" />
+        </attr>
+    </declare-styleable>
+
+```
+ 2、在布局文件中引用`DampingScrollViewGroup`，并分别设置`dampingFactor`和`dampingDirection`的值，他们的含义分别如下：
+ 
+ - `dampingFactor`：`阻尼因子`，值越小表示阻力越大，默认为1（即没有阻尼效果）。
+ - `dampingDirection`：`阻尼方向`，顾名思义，支持左、上、右、下这4种阻尼方向。
+
+请务必注意，在xml文件中使用`DampingScrollViewGroup`给你的布局添加阻尼效果时，<b>`DampingScrollViewGroup`的直接子View只能有一个！</b>（可以参考ScrollView。）
+
+举个栗子：
+
+`SimpleActivity.java`
+
+```
+public class SimpleActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_simple);
+    }
+
+    public void onClick(View view) {
+        Toast.makeText(this, "button click", Toast.LENGTH_SHORT).show();
+    }
+}
+```
+
+`activity_simple.xml`
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaohongshu.dampingscrolling.DampingScrollViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:dampingDirection="left|top|right|bottom"
+    app:dampingFactor="0.7">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="最简单的阻尼滚动"
+        android:textColor="@android:color/white" />
+
+</com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+```
+
+这样，一个非常简单的支持四向阻尼效果的小项目就出来了！看看效果图：
+
+<img src='app/screenshot/demo01.gif' height='480px'/>
 
 
 #实现过程
