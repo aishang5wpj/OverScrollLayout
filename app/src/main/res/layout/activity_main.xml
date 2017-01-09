@@ -49,13 +49,14 @@
         app:dampingDirection="left|top|right|bottom"
         app:dampingFactor="0.3">
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/holo_blue_light"
             android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:lines="1"
+            android:onClick="onClick"
             android:padding="20dp"
             android:text="四向阻尼"
             android:textColor="@android:color/white" />

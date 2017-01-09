@@ -6,10 +6,12 @@
     app:dampingDirection="left|top|right|bottom"
     app:dampingFactor="0.7">
 
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/holo_blue_light"
-        android:onClick="onClick" />
+        android:gravity="center"
+        android:text="最简单的阻尼滚动"
+        android:textColor="@android:color/white" />
 
 </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>

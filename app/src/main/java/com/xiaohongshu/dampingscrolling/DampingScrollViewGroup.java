@@ -89,10 +89,6 @@ public class DampingScrollViewGroup extends FrameLayout {
             if (null == mOnDampingCallback) {
 
                 mOnDampingCallback = try2GetOnDampingCallback();
-
-                if (null == mOnDampingCallback) {
-                    throw new IllegalStateException("mOnDampingCallback can not be null!");
-                }
             }
             intercept = isMoving(ev, mLastInterceptMotionEvent) && mOnDampingCallback.needDamping(ev, mLastInterceptMotionEvent);
         }
