@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
  */
 public class DampingScrollViewGroup extends FrameLayout {
 
+    private static final int HOVER_TAP_SLOP = 20;
     private static final int DIRECTION_LEFT = 0x0001;
     private static final int DIRECTION_TOP = 0x0010;
     private static final int DIRECTION_RIGHT = 0x0100;
@@ -92,10 +94,24 @@ public class DampingScrollViewGroup extends FrameLayout {
                     throw new IllegalStateException("mOnDampingCallback can not be null!");
                 }
             }
-            intercept = mOnDampingCallback.needDamping(ev, mLastInterceptMotionEvent);
+            intercept = isMoving(ev, mLastInterceptMotionEvent) && mOnDampingCallback.needDamping(ev, mLastInterceptMotionEvent);
         }
         mLastInterceptMotionEvent = MotionEvent.obtain(ev);
         return intercept;
+    }
+
+    /**
+     * 确保当前是滚动事件,而不是点击
+     *
+     * @param newMotionEvent
+     * @param oldMotionEvent
+     * @return
+     */
+    private boolean isMoving(MotionEvent newMotionEvent, MotionEvent oldMotionEvent) {
+
+        int dx = (int) (newMotionEvent.getRawX() - oldMotionEvent.getRawX());
+        int dy = (int) (newMotionEvent.getRawY() - oldMotionEvent.getRawY());
+        return Math.abs(dx) > HOVER_TAP_SLOP || Math.abs(dy) > HOVER_TAP_SLOP;
     }
 
     private OnDampingCallback try2GetOnDampingCallback() {
@@ -109,7 +125,7 @@ public class DampingScrollViewGroup extends FrameLayout {
         } else if (child instanceof RecyclerView) {
             return new RecyclerViewDampingCallback((RecyclerView) child);
         }
-        return null;
+        return new SimpleDampingCallback();
     }
 
     @Override
@@ -252,6 +268,17 @@ public class DampingScrollViewGroup extends FrameLayout {
     public interface OnDampingCallback {
 
         boolean needDamping(MotionEvent newMotionEvent, MotionEvent oldMotionEvent);
+    }
+
+    /**
+     * Created by wupengjian on 17/1/9.
+     */
+    public static class SimpleDampingCallback implements OnDampingCallback {
+
+        @Override
+        public boolean needDamping(MotionEvent newMotionEvent, MotionEvent oldMotionEvent) {
+            return true;
+        }
     }
 
     /**
