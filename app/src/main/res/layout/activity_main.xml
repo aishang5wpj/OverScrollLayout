@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xiaohongshu.dampingscrolling.MainActivity">
+
+    <com.xiaohongshu.dampingscrolling.DampingScrollViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:dampingDirection="left|right"
+        app:dampingFactor="0.3">
+
+        <android.support.v4.view.ViewPager
+
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+
+    <com.xiaohongshu.dampingscrolling.DampingScrollViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dampingDirection="left|right"
+        app:dampingFactor="0.3">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/holo_green_dark"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="3dp"
+                android:lines="1"
+                android:padding="20dp"
+                android:textColor="@android:color/white" />
+        </HorizontalScrollView>
+    </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+
+
+    <com.xiaohongshu.dampingscrolling.DampingScrollViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:dampingDirection="left|top|right|bottom"
+        app:dampingFactor="0.3">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_blue_light"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:lines="1"
+            android:padding="20dp"
+            android:text="四向阻尼"
+            android:textColor="@android:color/white" />
+    </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.xiaohongshu.dampingscrolling.DampingScrollViewGroup
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dampingDirection="top|bottom"
+            app:dampingFactor="0.3">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1000dp"
+                    android:background="@android:color/holo_red_light"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="3dp"
+                    android:padding="20dp"
+                    android:text="@string/text"
+                    android:textColor="@android:color/white" />
+            </ScrollView>
+        </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+
+        <com.xiaohongshu.dampingscrolling.DampingScrollViewGroup
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dampingDirection="top|bottom"
+            app:dampingFactor="0.3">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/holo_red_light" />
+
+        </com.xiaohongshu.dampingscrolling.DampingScrollViewGroup>
+    </LinearLayout>
+</LinearLayout>
