@@ -81,7 +81,7 @@ public class DampingScrollViewGroupPart1 extends FrameLayout {
     private void smoothScrollTo(int fx, int fy) {
 
         int dx = fx - mScroller.getFinalX();
-        int dy = fx - mScroller.getFinalY();
+        int dy = fy - mScroller.getFinalY();
         smoothScrollBy(dx, dy);
     }
 

@@ -392,7 +392,7 @@ public class DampingScrollViewGroup extends FrameLayout {
 
 描述：相同位的两个数字都为1，则为1；若有一个不为1，则为0。
 
-举例：a=0110，b=1100，则a&b的计算结果如下，
+举例：a=0110，b=1010，则a&b的计算结果如下，
 
 <img src='app/screenshot/and.png' height='180px'/>
 
@@ -401,7 +401,7 @@ public class DampingScrollViewGroup extends FrameLayout {
 
 描述：相同位只要一个为1即为1。
 
-举例：a=0110，b=1100，则a|b的计算结果如下，
+举例：a=0110，b=1010，则a|b的计算结果如下，
 
 <img src='app/screenshot/or.png' height='180px'/>
 
@@ -418,7 +418,7 @@ public class DampingScrollViewGroup extends FrameLayout {
 
 表格中是`autoLink`属性对应的各种值，假设我们用`mAutoLinkFlags`来保存`TextView`的各种值，并且初始状态为0：
 
-假设我们在布局文件中设置`autoLink`的属性值为`web | email`，则根据<b>或运算</b>的计算方式，可以得到`mAutoLinkFlags`= 0011。
+假设我们在布局文件中设置`autoLink`的属性值为`web|email`，即`0001|0010`，则根据<b>或运算</b>的计算方式，可以得到`mAutoLinkFlags = 0011`。
 
 那我们在代码中怎么知道`mAutoLinkFlags`有没有设置`web`或者`email`呢？根据<b>与运算</b>的计算原理，我们可以用公式:
 
@@ -428,11 +428,11 @@ public class DampingScrollViewGroup extends FrameLayout {
 
 比如我们要判断有没有设置`web`，则用`mAutoLinkFlags & web == web `来判断，即`0011 & 0001 == 0001`，很显然，这个等式是成立的。
 
-比如我们要判断有没有设置`phone `，则用`mAutoLinkFlags & phone == phone `来判断，即`0011 & 0100 == 0100`，左边算出来的值是0，等式不成立，所以`mAutoLinkFlags`中是没有设置`phone `属性的。
+比如我们要判断有没有设置`phone `，则用`mAutoLinkFlags & phone == phone `来判断，即`0011 & 0100 == 0100`，左边算出来的值是0，左边!=右边，等式不成立，所以`mAutoLinkFlags`中是没有设置`phone `属性的。
 
 <b>我们通常用一个int类型的值来存储所有的flags，每种flag在该值中占据1个`bit`的位置，并用该`bit`上的值为1或0来表示flag对应的两种状态。</b>
 
-我们知道，`int类型`在Java中占据4个`Byte`，每个`Byte`有8个`bit`，一共有32个`bit`。所以理想情况下一个`int类型`的变量最多可以存放多大32种不同的flags，并且他们可以同时生效互不干扰。
+我们知道，`int类型`在Java中占据4个`Byte`，每个`Byte`有8个`bit`，一共有32个`bit`。所以理想情况下一个`int类型`的变量最多可以存放多达32种不同的flags，并且他们可以同时生效互不干扰。
 
 如果不这么做，你可能需要用32个布尔变量来存放所有的属性值。。
 
