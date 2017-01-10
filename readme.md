@@ -450,9 +450,209 @@ public class DampingScrollViewGroup extends FrameLayout {
 
 ##处理滑动冲突，支持常用ViewGroup作为子View时的阻尼效果
 
+滑动冲突是一个老生常谈的问题了，带滑动效果的自定义ViewGroup大多都需要处理滑动冲突的问题，包括我们这个`DampingScrollViewGroup`。
 
+根据任玉刚老师的`《Android开发艺术探索》`一书中的描述，解决滑动冲突的办法一般有两种固定思路：<b>外部拦截法</b>和<b>内部拦截法</b>。
+
+###外部拦截法
+描述：父控件对所有的事件进行过滤拦截，即当父控件需要处理事件时则拦截，反之则不拦截。
+
+伪代码：
+
+```
+//父控件代码
+public boolean onInterceptTouchEvent(MotionEvent event){
+
+	boolean intercepted = false;
+	switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			  intercepted = false;
+			  break;
+		case MotionEvent.ACTION_MOVE:
+			  if(父控件需要处理此次事件){
+			 		intercepted = true;
+			  }else{
+			  		intercepted = false;
+			  }
+			  break;
+		case MotionEvent.ACTION_UP:
+			  intercepted = false;
+			  break;
+	}
+	reture intercepted;
+}
+```
+
+###内部拦截法
+描述：父控件始终拦截除`ACTION_DOWN`以外的所有事件，子View则根据需要来禁止父控件的拦截能力，如果子View需要处理事件，则禁止父控件拦截事件；反之则不禁止。
+
+伪代码：
+
+```
+//父控件代码
+public boolean onInterceptTouchEvent(MotionEvent event){
+
+	if(event.getAction() == MotionEvent.ACTION_DOWN){
+		return false;
+	}
+	reture true;
+}
+
+//子View代码
+public boolean dispatchTouchEvent(MotionEvent event){
+
+	switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			  getParent().requestDisallowInterceptTouchEvent(true);
+			  break;
+		case MotionEvent.ACTION_MOVE:
+			  if(父控件需要处理此次事件){
+				  getParent().requestDisallowInterceptTouchEvent(false);
+			  }
+			  break;
+		case MotionEvent.ACTION_UP:
+			  break;
+	}
+	reture super.dispatchTouchEvent(event);
+}
+```
+
+对于<b>外部拦截法</b>，比较符合事件的分发机制，而且对子View的侵入性比较小，只涉及到父控件的修改。
+
+对于<b>内部拦截法</b>，这种解决方案稍微麻烦，而且需要同时修改父控件和子View的相关代码。
+
+同时由于我们需要对诸多滑动控件支持阻尼效果，不可能一个个去扩展所有滑动控件，这样工作量大，也不符合设计模式。综上所述，我们采用<b>外部拦截法</b>来处理这里的滑动冲突。
+
+来看看`DampingScrollViewGroup`中的实现：
+
+1、首先，我们定义了一个接口`OnDampingCallback `，用来判断子View此时是否需要产生阻尼效果
+
+```
+    public interface OnDampingCallback {
+
+        boolean needDamping(MotionEvent newMotionEvent, MotionEvent oldMotionEvent);
+    }
+```
+
+2、其次，在`onInterceptTouchEvent()`方法中，根据子类实现的`OnDampingCallback `对象来判断是否需要拦截事件，比如如果子View告诉我们此时需要产生阻尼效果，则我们就开始拦截事件；繁殖则不拦截。
+
+```
+    private OnDampingCallback mOnDampingCallback;
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        boolean intercept;
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            intercept = false;
+        } else {
+            if (null == mOnDampingCallback) {
+
+                mOnDampingCallback = try2GetOnDampingCallback();
+            }
+            intercept = mOnDampingCallback.needDamping(ev, mLastInterceptMotionEvent);
+        }
+        mLastInterceptMotionEvent = MotionEvent.obtain(ev);
+        return intercept;
+    }
+    
+    public void setOnDampingCallback(OnDampingCallback callback) {
+        mOnDampingCallback = callback;
+    }
+```
+
+`mOnDampingCallback `可以通过外部方法来设置，在`DampingScrollViewGroup`的`try2GetOnDampingCallback()`方法中也默认提供了诸多滑动控件`OnDampingCallback `的默认实现，即根据滑动控件的不同状态来决定是否需要显示阻尼效果。
+
+```
+    private OnDampingCallback try2GetOnDampingCallback() {
+        View child = getChildAt(0);
+        if (child instanceof ViewPager) {
+            return new ViewPagerDampingCallback((ViewPager) child);
+        } else if (child instanceof ScrollView) {
+            return new ScrollViewDampingCallback((ScrollView) child);
+        } else if (child instanceof HorizontalScrollView) {
+            return new HorizontalScrollViewDampingCallback((HorizontalScrollView) child);
+        } else if (child instanceof RecyclerView) {
+            return new RecyclerViewDampingCallback((RecyclerView) child);
+        }
+        return new SimpleDampingCallback();
+    }
+```
+
+这些`OnDampingCallback`子类的实现基本大同小异，我们只看一个就好，比如`ViewPagerDampingCallback`：
+
+```
+    public static class ViewPagerDampingCallback implements OnDampingCallback {
+
+        private ViewPager mViewPager;
+
+        public ViewPagerDampingCallback(ViewPager viewPager) {
+
+            mViewPager = viewPager;
+        }
+
+        @Override
+        public boolean needDamping(MotionEvent newMotionEvent, MotionEvent oldMotionEvent) {
+
+            if (null == newMotionEvent || null == oldMotionEvent) {
+                return false;
+            }
+            //左边是否需要处理阻尼效果
+            boolean isLeftDamping = isMoving2Left(newMotionEvent, oldMotionEvent) && mViewPager.getCurrentItem() == 0;
+            //右边是否需要处理阻尼效果
+            boolean isRightDamping = isMoving2Right(newMotionEvent, oldMotionEvent) && mViewPager.getCurrentItem() == mViewPager.getAdapter().getCount() - 1;
+            //左边或右边需要处理阻尼效果
+            return isLeftDamping || isRightDamping;
+        }
+    }
+```
+在`needDamping()`方法中，如果用户手指当前往右移即`ViewPager`应当显示左边的内容，而且`ViewPager`当前先第0个，则表示`ViewPager`此时需要显示阻尼滚动的效果，所以`isLeftDamping = true`，`needDamping()`的返回值也为true。
+
+所以`DampingScrollViewGroup `中的`onInterceptTouchEvent()`也返回true，表示会拦截此次滑动事件，拦截过后`MotionEvent`就走到了`onTouchEvent()`中，就回到我们最开始讨论的`阻尼效果`产生的地方。
+
+这里就不再赘述了。
 
 ##解决Button等作为子View时无法响应点击事件的bug
+
+代码写到这里，大部分问题都处理完了，还有一个问题就是处理点击事件的问题。
+
+我们知道，手指在手机屏幕上点击的时候，产生的`MotionEvent`一定会产生若干的`ACTION_MOVE`事件，而如果这些事件被误拦截了，子View是永远也无法响应点击事件的。
+
+所以我们在`DampingScrollViewGroup `中的`onInterceptTouchEvent()`判断是否拦截事件时，除了获取`OnDampingCallback.needDamping()`的值，还要判断当前事件是点击还是滑动。
+
+修改后的方法如下：
+
+```
+    private static final int HOVER_TAP_SLOP = 20;
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        boolean intercept;
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            intercept = false;
+        } else {
+            if (null == mOnDampingCallback) {
+
+                mOnDampingCallback = try2GetOnDampingCallback();
+            }
+            intercept = isMoving(ev, mLastInterceptMotionEvent) && mOnDampingCallback.needDamping(ev, mLastInterceptMotionEvent);
+        }
+        mLastInterceptMotionEvent = MotionEvent.obtain(ev);
+        return intercept;
+    }
+    
+    private boolean isMoving(MotionEvent newMotionEvent, MotionEvent oldMotionEvent) {
+
+        int dx = (int) (newMotionEvent.getRawX() - oldMotionEvent.getRawX());
+        int dy = (int) (newMotionEvent.getRawY() - oldMotionEvent.getRawY());
+        return Math.abs(dx) > HOVER_TAP_SLOP || Math.abs(dy) > HOVER_TAP_SLOP;
+    }
+```
+
+其中`HOVER_TAP_SLOP`是从`ViewConfiguration`中直接复制出来的值。
+
+至此，`DampingScrollViewGroup`的所有逻辑就分析完啦。
  
 关于
 --

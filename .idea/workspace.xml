@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c67ffea3-b193-477b-8acf-156607137579" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroupCopy.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/readme.md" afterPath="$PROJECT_DIR$/readme.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/xiaohongshu/dampingscrolling/temp" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/xiaohongshu/dampingscrolling/temp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroup.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroup.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroupPart1.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroupPart1.java" />
     </list>
     <ignored path="DampingScrolling.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,9 +58,12 @@
       <file leaf-file-name="DampingScrollViewGroup.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroup.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2733813">
-              <caret line="200" column="5" selection-start-line="200" selection-start-column="5" selection-end-line="200" selection-end-column="5" />
-              <folding />
+            <state vertical-scroll-proportion="0.7290168">
+              <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
+              <folding>
+                <element signature="e#9527#9528#0" expanded="true" />
+                <element signature="e#9572#9573#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2453,7 +2452,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484034156917</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix bugs">
+      <created>1484035538351</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1484035538351</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2529,7 +2534,8 @@
     <MESSAGE value="更新截图;" />
     <MESSAGE value="更新readme" />
     <MESSAGE value="更新截图" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新截图" />
+    <MESSAGE value="fix bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2572,7 +2578,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="93" column="9" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
-          <folding />
+          <folding>
+            <element signature="e#9527#9528#0" expanded="true" />
+            <element signature="e#9572#9573#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2709,6 +2718,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5869981">
           <caret line="567" column="38" selection-start-line="567" selection-start-column="38" selection-end-line="567" selection-end-column="38" />
+          <folding>
+            <element signature="e#123299#123300#0" expanded="false" />
+            <element signature="e#123335#123336#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2773,9 +2786,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/xiaohongshu/dampingscrolling/DampingScrollViewGroup.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2733813">
-          <caret line="200" column="5" selection-start-line="200" selection-start-column="5" selection-end-line="200" selection-end-column="5" />
-          <folding />
+        <state vertical-scroll-proportion="0.7290168">
+          <caret line="47" column="7" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="7" />
+          <folding>
+            <element signature="e#9527#9528#0" expanded="true" />
+            <element signature="e#9572#9573#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
