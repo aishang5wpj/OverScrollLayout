@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="DampingScrollViewGroup">
+    <declare-styleable name="OverScrollLayout">
         <attr name="dampingFactor" format="float" />
         <attr name="dampingDirection">
             <flag name="left" value="0x0001" />

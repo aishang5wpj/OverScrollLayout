@@ -10,17 +10,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.Scroller;
-import android.widget.Toast;
 
 /**
  * Created by wupengjian on 17/1/7.
  */
-public class DampingScrollViewGroup extends FrameLayout {
+public class OverScrollLayout extends FrameLayout {
 
     private static final int HOVER_TAP_SLOP = 20;
     private static final int DIRECTION_LEFT = 0x0001;
@@ -49,27 +47,27 @@ public class DampingScrollViewGroup extends FrameLayout {
     private int mLastDirection;
     private OnDampingCallback mOnDampingCallback;
 
-    public DampingScrollViewGroup(Context context) {
+    public OverScrollLayout(Context context) {
         this(context, null);
     }
 
-    public DampingScrollViewGroup(Context context, AttributeSet attrs) {
+    public OverScrollLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DampingScrollViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+    public OverScrollLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.DampingScrollViewGroup, defStyleAttr, 0);
+                R.styleable.OverScrollLayout, defStyleAttr, 0);
         int count = a.getIndexCount();
         for (int i = 0; i < count; i++) {
             int index = a.getIndex(i);
             switch (index) {
-                case R.styleable.DampingScrollViewGroup_dampingDirection:
+                case R.styleable.OverScrollLayout_dampingDirection:
                     mTargetDirection |= a.getInt(index, DIRECTION_DEFAULT);
                     break;
-                case R.styleable.DampingScrollViewGroup_dampingFactor:
+                case R.styleable.OverScrollLayout_dampingFactor:
                     mFator = a.getFloat(index, DEFAULT_FATOR);
                     break;
             }

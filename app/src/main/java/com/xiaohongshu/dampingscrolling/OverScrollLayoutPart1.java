@@ -10,7 +10,7 @@ import android.widget.Scroller;
 /**
  * Created by wupengjian on 17/1/7.
  */
-public class DampingScrollViewGroupPart1 extends FrameLayout {
+public class OverScrollLayoutPart1 extends FrameLayout {
 
     private static final float DEFAULT_FATOR = 1;
     /**
@@ -23,24 +23,24 @@ public class DampingScrollViewGroupPart1 extends FrameLayout {
      */
     private MotionEvent mLastMotionEvent;
 
-    public DampingScrollViewGroupPart1(Context context) {
+    public OverScrollLayoutPart1(Context context) {
         this(context, null);
     }
 
-    public DampingScrollViewGroupPart1(Context context, AttributeSet attrs) {
+    public OverScrollLayoutPart1(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DampingScrollViewGroupPart1(Context context, AttributeSet attrs, int defStyleAttr) {
+    public OverScrollLayoutPart1(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.DampingScrollViewGroup, defStyleAttr, 0);
+                R.styleable.OverScrollLayout, defStyleAttr, 0);
         int count = a.getIndexCount();
         for (int i = 0; i < count; i++) {
             int index = a.getIndex(i);
             switch (index) {
-                case R.styleable.DampingScrollViewGroup_dampingFactor:
+                case R.styleable.OverScrollLayout_dampingFactor:
                     mFator = a.getFloat(index, DEFAULT_FATOR);
                     break;
             }
